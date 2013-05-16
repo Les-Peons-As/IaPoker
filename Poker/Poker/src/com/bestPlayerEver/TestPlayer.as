@@ -59,7 +59,7 @@ package com.bestPlayerEver
 						
 						/*expertSystem.AddRule([RELANCENULLE], CHECK);
 						expertSystem.AddRule([RELANCEFAIBLE], CALL);
-						expertSystem.AddRule([RELANCEFORTE], CALL);*/
+						expertSystem.AddRule([RELANCEFORTE], CALL); à virer, est là pour le debug*/
 						expertSystem.AddRule([CARTEJOUEURFAIBLE, RELANCENULLE], CHECK);
 						expertSystem.AddRule([CARTEJOUEURFAIBLE, RELANCEFAIBLE], FOLD);
 						expertSystem.AddRule([CARTEJOUEURFAIBLE, RELANCEFORTE], FOLD);
@@ -137,9 +137,9 @@ package com.bestPlayerEver
                         } else {
                                 //Pas d'action trouvée
                                 //return null;
-								return "Tapis";
+								return CALL;
                         }
-						return "Tapis";
+						return CALL;
                        
                 }
                
