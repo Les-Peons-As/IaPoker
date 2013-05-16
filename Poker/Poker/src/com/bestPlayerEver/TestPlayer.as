@@ -127,6 +127,9 @@ package com.bestPlayerEver
                                 //Problème de logique parallèle
                                
                                 /* Choisir une action */
+								var indexAleatoire:int = new int;
+								indexAleatoire = Math.floor((Math.random() * (length - 1)) + 0);
+								return actions[indexAleatoire];
                                
                         } else if (actions.length > 0) {
                                 //Une seule action
@@ -178,7 +181,6 @@ package com.bestPlayerEver
 						} else if ((valeurCarte >= 75) && (valeurCarte <= 100 )) {
 							expertSystem.SetFactValue(CARTEJOUEURELEVEE, true);
 						}
-                       
                        
                 }
                
