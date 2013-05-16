@@ -18,19 +18,37 @@ package com.bestPlayerEver
         public class TestPlayer extends PokerPlayer
         {
 			protected var expertSystem;
+			// conclusions
 			protected var littleRaise:String = "Petite relance";
 			protected var bigRaise:String = "Grosse relance";
 			protected var fold:String = "Se coucher";
 			protected var check:String = "Check";
 			protected var call:String = "Suivre";
 			protected var AllIn:String = "Tapis";
+			// faits
+			protected var CarteJoueurFaible:String = "CarteJoueurFaible";
+			protected var CarteJoueurMoyenBas:String = "CarteJoueurMoyenBas";
+			protected var CarteJoueurMoyenHaut:String = "CarteJoueurMoyenHaut";
+			protected var CarteJoueurElevee:String = "CarteJoueurElevee";
+			protected var PositionPetiteBlinde:String = "PositionPetiteBlinde";
+			protected var PositionGrosseBlinde:String = "PositionGrosseBlinde";
+			protected var PositionDealer:String = "PositionDealer";
+			protected var PositionUnderTheGun:String = "PositionUnderTheGun";
+			protected var PositionAutre:String = "PositionAutre";
+			protected var PortefeuilleFaible:String = "PortefeuilleFaible";
+			protected var PortefeuilleConfortable:String = "PortefeuilleConfortable";
+			protected var PortefeuilleFort:String = "PortefeuilleFort";
+			protected var RelanceNulle:String = "RelanceNulle";
+			protected var RelanceFaible:String = "RelanceFaible";
+			protected var RelanceForte:String = "RelanceForte";
 			
-			
-               
-                public function TestPlayer(_name:String, _stackValue:Number)
+				public function TestPlayer(_name:String, _stackValue:Number)
                 {
                         super(_name, _stackValue);
 						expertSystem = new ExpertSystem();
+						// règles
+						expertSystem.AddRule(["RelanceNulle"], "Check");
+						expertSystem.AddRule(["RelanceFaible"], "Suivre");
                 }
                
                 override public function Play(_pokertable:PokerTable) : Boolean {
