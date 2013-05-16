@@ -1,5 +1,6 @@
 ﻿package
 {
+	import com.bestPlayerEver.TestPlayer;
 	import com.novabox.playingCards.Deck;
 	import com.novabox.playingCards.Height;
 	import com.novabox.playingCards.PlayingCard;
@@ -44,7 +45,7 @@
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
 						
-			var players:Array = [	new PokerPlayer("player 1", PokerTable.PLAYER_INIT_STACK),
+			var players:Array = [	new TestPlayer("Bernard", PokerTable.PLAYER_INIT_STACK),
 									new PokerPlayer("player 2", PokerTable.PLAYER_INIT_STACK),
 									new PokerPlayer("player 3", PokerTable.PLAYER_INIT_STACK),
 									new PokerPlayer("player 4", PokerTable.PLAYER_INIT_STACK)
