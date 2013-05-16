@@ -52,10 +52,14 @@ package com.bestPlayerEver
                 {
                         super(_name, _stackValue);
 						expertSystem = new ExpertSystem();
+						handEvaluator = new HandEvaluator();
 						// règles
 						
 						expertSystem.AddRule([SUIVREGROSSEBLINDE], CALL);
 						
+						/*expertSystem.AddRule([RELANCENULLE], CHECK);
+						expertSystem.AddRule([RELANCEFAIBLE], CALL);
+						expertSystem.AddRule([RELANCEFORTE], CALL);*/
 						expertSystem.AddRule([CARTEJOUEURFAIBLE, RELANCENULLE], CHECK);
 						expertSystem.AddRule([CARTEJOUEURFAIBLE, RELANCEFAIBLE], FOLD);
 						expertSystem.AddRule([CARTEJOUEURFAIBLE, RELANCEFORTE], FOLD);
@@ -110,11 +114,11 @@ package com.bestPlayerEver
                        
                         var conclusionLabels:Array = expertSystem.InferForward();
                        
-                        conclusionLabels = expertSystem.InferForward()
+                        //conclusionLabels = expertSystem.InferForward()
                        
                         var actions:Array = new Array();
                         //actions = /*conclusionLabels sans les faits intermédiaires*/
-						for each (var uneConclusion in conclusionLabels){
+						for each (var uneConclusion:String in conclusionLabels){
 							actions.push(uneConclusion);
 						}
                        
@@ -126,19 +130,21 @@ package com.bestPlayerEver
                                
                         } else if (actions.length > 0) {
                                 //Une seule action
-                                return actions[0]
+                                return actions[0];
                         } else {
                                 //Pas d'action trouvée
                                 //return null;
-								return "Suivre";
+								return "Tapis";
                         }
-						return "Suivre";
+						return "Tapis";
                        
                 }
                
                 public function Perceive(_pokertable:PokerTable) : void {
                                                
                         expertSystem.ResetFactValues();
+						var valeurCarte:int;
+						valeurCarte= new int;
                        
                         if (_pokertable.GetValueToCall() > 0) {
                                 //Relancé
@@ -158,6 +164,20 @@ package com.bestPlayerEver
                                        
                                 }
                         }
+						
+						//valeurCarte = handEvaluator.eval_5cards(GetCard(0).GetHeight(), GetCard(1).GetHeight(), GetCard(2).GetHeight(), GetCard(3).GetHeight(), GetCard(4).GetHeight());
+						valeurCarte = GetCard(0).GetHeight() + GetCard(1).GetHeight();
+						trace(valeurCarte);
+						if ((valeurCarte >= 0) && (valeurCarte < 25 ))
+						{
+							expertSystem.SetFactValue(CARTEJOUEURFAIBLE, true);
+						} else if ((valeurCarte >= 25) && (valeurCarte < 50 )) {
+							expertSystem.SetFactValue(CARTEJOUEURMOYENBAS, true);
+						} else if ((valeurCarte >= 50) && (valeurCarte < 75 )) {
+							expertSystem.SetFactValue(CARTEJOUEURMOYENHAUT, true);
+						} else if ((valeurCarte >= 75) && (valeurCarte <= 100 )) {
+							expertSystem.SetFactValue(CARTEJOUEURELEVEE, true);
+						}
                        
                        
                 }
