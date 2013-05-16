@@ -17,35 +17,36 @@ package com.bestPlayerEver
          */
         public class TestPlayer extends PokerPlayer
         {
-			protected var expertSystem;
+			protected var handEvaluator:HandEvaluator;
+			protected var expertSystem:ExpertSystem;
 			// conclusions
-			protected var littleRaise:String = "Petite relance";
-			protected var bigRaise:String = "Grosse relance";
-			protected var fold:String = "Se coucher";
-			protected var check:String = "Check";
-			protected var call:String = "Suivre";
-			protected var AllIn:String = "Tapis";
+			protected static const LITTLERAISE:String = "Petite relance";
+			protected static const BIGRAISE:String = "Grosse relance";
+			protected static const FOLD:String = "Se coucher";
+			protected static const CHECK:String = "Check";
+			protected static const CALL:String = "Suivre";
+			protected static const ALLIN:String = "Tapis";
 			// faits
-			protected var CarteJoueurFaible:String = "CarteJoueurFaible";
-			protected var CarteJoueurMoyenBas:String = "CarteJoueurMoyenBas";
-			protected var CarteJoueurMoyenHaut:String = "CarteJoueurMoyenHaut";
-			protected var CarteJoueurElevee:String = "CarteJoueurElevee";
+			protected var CARTEJOUEURFAIBLE:String = "CarteJoueurFaible";
+			protected var CARTEJOUEURMOYENBAS:String = "CarteJoueurMoyenBas";
+			protected var CARTEJOUEURMOYENHAUT:String = "CarteJoueurMoyenHaut";
+			protected var CARTEJOUEURELEVEE:String = "CarteJoueurElevee";
 			
-			protected var PositionPetiteBlinde:String = "PositionPetiteBlinde";
-			protected var PositionGrosseBlinde:String = "PositionGrosseBlinde";
-			protected var PositionDealer:String = "PositionDealer";
-			protected var PositionUnderTheGun:String = "PositionUnderTheGun";
-			protected var PositionAutre:String = "PositionAutre";
+			protected var POSITIONPETITEBLINDE:String = "PositionPetiteBlinde";
+			protected var POSITIONGROSSEBLINDE:String = "PositionGrosseBlinde";
+			protected var POSITIONDEALER:String = "PositionDealer";
+			protected var POSITIONUNDERTHEGUN:String = "PositionUnderTheGun";
+			protected var POSITIONAUTRE:String = "PositionAutre";
 			
-			protected var PortefeuilleFaible:String = "PortefeuilleFaible";
-			protected var PortefeuilleConfortable:String = "PortefeuilleConfortable";
-			protected var PortefeuilleFort:String = "PortefeuilleFort";
+			protected var PORTEFEUILLEFAIBLE:String = "PortefeuilleFaible";
+			protected var PORTEFEUILLECONFORTABLE:String = "PortefeuilleConfortable";
+			protected var PORTEFEUILLEFORT:String = "PortefeuilleFort";
 			
-			protected var RelanceNulle:String = "RelanceNulle";
-			protected var RelanceFaible:String = "RelanceFaible";
-			protected var RelanceForte:String = "RelanceForte";
+			protected var RELANCENULLE:String = "RelanceNulle";
+			protected var RELANCEFAIBLE:String = "RelanceFaible";
+			protected var RELANCEFORTE:String = "RelanceForte";
 			
-			protected var SuivreGrosseBlinde:String = "SuivreGrosseBlinde";
+			protected var SUIVREGROSSEBLINDE:String = "SuivreGrosseBlinde";
 			
 				public function TestPlayer(_name:String, _stackValue:Number)
                 {
@@ -53,34 +54,34 @@ package com.bestPlayerEver
 						expertSystem = new ExpertSystem();
 						// règles
 						
-						expertSystem.AddRule([SuivreGrosseBlinde], call);
+						expertSystem.AddRule([SUIVREGROSSEBLINDE], CALL);
 						
-						expertSystem.AddRule([CarteJoueurFaible, RelanceNulle], check);
-						expertSystem.AddRule([CarteJoueurFaible, RelanceFaible], fold);
-						expertSystem.AddRule([CarteJoueurFaible, RelanceForte], fold);
+						expertSystem.AddRule([CARTEJOUEURFAIBLE, RELANCENULLE], CHECK);
+						expertSystem.AddRule([CARTEJOUEURFAIBLE, RELANCEFAIBLE], FOLD);
+						expertSystem.AddRule([CARTEJOUEURFAIBLE, RELANCEFORTE], FOLD);
 						
-						expertSystem.AddRule([CarteJoueurMoyenBas, RelanceNulle], check);
-						expertSystem.AddRule([CarteJoueurMoyenBas, RelanceFaible], fold);
-						expertSystem.AddRule([CarteJoueurMoyenBas, RelanceForte], fold);
+						expertSystem.AddRule([CARTEJOUEURMOYENBAS, RELANCENULLE], CHECK);
+						expertSystem.AddRule([CARTEJOUEURMOYENBAS, RELANCEFAIBLE], FOLD);
+						expertSystem.AddRule([CARTEJOUEURMOYENBAS, RELANCEFORTE], FOLD);
 						
-						expertSystem.AddRule([CarteJoueurMoyenHaut, RelanceNulle], check);
-						expertSystem.AddRule([CarteJoueurMoyenHaut, RelanceNulle, PositionUnderTheGun, PortefeuilleConfortable], littleRaise);
-						expertSystem.AddRule([CarteJoueurMoyenHaut, RelanceNulle, PositionUnderTheGun, PortefeuilleFort], bigRaise);
-						expertSystem.AddRule([CarteJoueurMoyenHaut, RelanceFaible, PortefeuilleConfortable], call);
-						expertSystem.AddRule([CarteJoueurMoyenHaut, RelanceFaible, PortefeuilleFort], littleRaise);
-						expertSystem.AddRule([CarteJoueurMoyenHaut, RelanceForte, PortefeuilleConfortable], call);
-						expertSystem.AddRule([CarteJoueurMoyenHaut, RelanceForte, PortefeuilleFort], littleRaise);
-						expertSystem.AddRule([CarteJoueurMoyenHaut, RelanceForte, PortefeuilleFort, PositionUnderTheGun ], bigRaise);
+						expertSystem.AddRule([CARTEJOUEURMOYENHAUT, RELANCENULLE], CHECK);
+						expertSystem.AddRule([CARTEJOUEURMOYENHAUT, RELANCENULLE, POSITIONUNDERTHEGUN, PORTEFEUILLECONFORTABLE], LITTLERAISE);
+						expertSystem.AddRule([CARTEJOUEURMOYENHAUT, RELANCENULLE, POSITIONUNDERTHEGUN, PORTEFEUILLEFORT], BIGRAISE);
+						expertSystem.AddRule([CARTEJOUEURMOYENHAUT, RELANCEFAIBLE, PORTEFEUILLECONFORTABLE], CALL);
+						expertSystem.AddRule([CARTEJOUEURMOYENHAUT, RELANCEFAIBLE, PORTEFEUILLEFORT], LITTLERAISE);
+						expertSystem.AddRule([CARTEJOUEURMOYENHAUT, RELANCEFORTE, PORTEFEUILLECONFORTABLE], CALL);
+						expertSystem.AddRule([CARTEJOUEURMOYENHAUT, RELANCEFORTE, PORTEFEUILLEFORT], LITTLERAISE);
+						expertSystem.AddRule([CARTEJOUEURMOYENHAUT, RELANCEFORTE, PORTEFEUILLEFORT, POSITIONUNDERTHEGUN ], BIGRAISE);
 						
-						expertSystem.AddRule([CarteJoueurElevee, RelanceNulle], littleRaise);
-						expertSystem.AddRule([CarteJoueurElevee, RelanceNulle, PositionUnderTheGun, PortefeuilleConfortable], bigRaise);
-						expertSystem.AddRule([CarteJoueurElevee, RelanceNulle, PositionUnderTheGun, PortefeuilleFort], bigRaise);
-						expertSystem.AddRule([CarteJoueurElevee, RelanceFaible,PortefeuilleFaible], call);
-						expertSystem.AddRule([CarteJoueurElevee, RelanceFaible, PortefeuilleConfortable], call);
-						expertSystem.AddRule([CarteJoueurElevee, RelanceFaible, PortefeuilleFort], littleRaise);
-						expertSystem.AddRule([CarteJoueurElevee, RelanceForte], call);
-						expertSystem.AddRule([CarteJoueurElevee, RelanceForte, PortefeuilleConfortable], littleRaise);
-						expertSystem.AddRule([CarteJoueurElevee, RelanceForte, PortefeuilleFort], bigRaise);
+						expertSystem.AddRule([CARTEJOUEURELEVEE, RELANCENULLE], LITTLERAISE);
+						expertSystem.AddRule([CARTEJOUEURELEVEE, RELANCENULLE, POSITIONUNDERTHEGUN, PORTEFEUILLECONFORTABLE], BIGRAISE);
+						expertSystem.AddRule([CARTEJOUEURELEVEE, RELANCENULLE, POSITIONUNDERTHEGUN, PORTEFEUILLEFORT], BIGRAISE);
+						expertSystem.AddRule([CARTEJOUEURELEVEE, RELANCEFAIBLE,PORTEFEUILLEFAIBLE], CALL);
+						expertSystem.AddRule([CARTEJOUEURELEVEE, RELANCEFAIBLE, PORTEFEUILLECONFORTABLE], CALL);
+						expertSystem.AddRule([CARTEJOUEURELEVEE, RELANCEFAIBLE, PORTEFEUILLEFORT], LITTLERAISE);
+						expertSystem.AddRule([CARTEJOUEURELEVEE, RELANCEFORTE], CALL);
+						expertSystem.AddRule([CARTEJOUEURELEVEE, RELANCEFORTE, PORTEFEUILLECONFORTABLE], LITTLERAISE);
+						expertSystem.AddRule([CARTEJOUEURELEVEE, RELANCEFORTE, PORTEFEUILLEFORT], BIGRAISE);
                 }
                
                 override public function Play(_pokertable:PokerTable) : Boolean {
@@ -94,10 +95,12 @@ package com.bestPlayerEver
                
                
                 public function Act(actionLabel:String, pokerTable:PokerTable) : void {
-                        if (actionLabel == "Suivre") {
+                        if (actionLabel == CALL) {
                                 Call(pokerTable.GetValueToCall());
-                        } else if (actionLabel == "ALL IN") {
+                        } else if (actionLabel == ALLIN) {
 								Raise(GetStackValue(), pokerTable.GetValueToCall());
+						} else if (actionLabel == CHECK) {
+								Check();
 						}
                         /* else if (...) {
                         } */
@@ -107,11 +110,13 @@ package com.bestPlayerEver
                        
                         var conclusionLabels:Array = expertSystem.InferForward();
                        
-                        //conclusionLabels = expertSystem.InferForward()
+                        conclusionLabels = expertSystem.InferForward()
                        
                         var actions:Array = new Array();
                         //actions = /*conclusionLabels sans les faits intermédiaires*/
-						actions[0] = "ALL IN";
+						for each (var uneConclusion in conclusionLabels){
+							actions.push(uneConclusion);
+						}
                        
                        
                         if (actions.length > 1) {
@@ -137,9 +142,12 @@ package com.bestPlayerEver
                        
                         if (_pokertable.GetValueToCall() > 0) {
                                 //Relancé
-                                expertSystem.SetFactValue("Relancé", true);
+								if (_pokertable.GetValueToCall() < 10)
+									expertSystem.SetFactValue(RELANCEFAIBLE, true);
+								else
+									expertSystem.SetFactValue(RELANCEFORTE, true);
                         } else {
-                                expertSystem.SetFactValue("Pas relancé", true);
+                                expertSystem.SetFactValue(RELANCENULLE, true);
                         }
                                                
                         if (GetCard(0).GetHeight() == GetCard(1).GetHeight()) {
