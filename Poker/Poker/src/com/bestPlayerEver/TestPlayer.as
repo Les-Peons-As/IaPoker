@@ -163,7 +163,7 @@ package com.bestPlayerEver
                                 expertSystem.SetFactValue(RELANCENULLE, true);
                         }
 						
-						//Perçoit la valeur de son portefeuille
+						//Perçoit la valeur de notre portefeuille
 						if (GetStackValue() >= (valeurDePortefeuilleDeDepart * 3)) {
 							expertSystem.SetFactValue(PORTEFEUILLEFORT, true);
 							
@@ -174,13 +174,20 @@ package com.bestPlayerEver
 							expertSystem.SetFactValue(PORTEFEUILLECONFORTABLE, true)
 						}
 						
-						//Perçoit sa potition sur la table
+						//Perçoit notre position sur la table
 						//_pokertable.GetCurrentPlayer()
-						/*if (_pokertable.GetDealer() == this)
-							expertSystem.SetFactValue(POSITIONDEALER, true);*/
+						if (_pokertable.GetDealer() == this) {
+							expertSystem.SetFactValue(POSITIONDEALER, true);	
+						} else if(estPetiteBlinde(_pokertable)){
+							expertSystem.SetFactValue(POSITIONPETITEBLINDE, true);
+						} else if (estUnderTheGun(_pokertable)) {
+							expertSystem.SetFactValue(POSITIONUNDERTHEGUN, true);
+						} else {
+							expertSystem.SetFactValue(POSITIONAUTRE, true);
+						}
 						
 						
-						//Perçoit la valeur des cartes                    
+						//Perçoit la valeur de nos cartes                    
                         if (GetCard(0).GetHeight() == GetCard(1).GetHeight()) {
                                 //Pocket Pair
                                
@@ -205,6 +212,52 @@ package com.bestPlayerEver
 						}
                        
                 }
+				
+				private function estPetiteBlinde(_pokertable:PokerTable) : Boolean
+				{
+					var notreIndex:int;
+					notreIndex = _pokertable.GetPlayerIndex(this)
+					if (_pokertable.GetNextPlayerIndex(_pokertable.GetPlayerIndex(_pokertable.GetDealer())) == notreIndex)
+						return true;
+					
+					return false;
+				}
+				
+				private function estGrosseBlinde(_pokertable:PokerTable) : Boolean
+				{
+					var notreIndex:int;
+					var indexDealer:int
+					var indexPetiteBlinde:int
+					notreIndex = _pokertable.GetPlayerIndex(this);
+					indexDealer = _pokertable.GetNextPlayerIndex(_pokertable.GetPlayerIndex(_pokertable.GetDealer()));
+					indexPetiteBlinde = _pokertable.GetNextPlayerIndex(indexDealer);
+					
+					if (_pokertable.GetNextPlayerIndex(indexPetiteBlinde) == notreIndex)
+						return true;
+					
+					return false;
+				}
+				
+				private function estUnderTheGun(_pokertable:PokerTable) : Boolean
+				{
+					var notreIndex:int;
+					var indexDealer:int
+					var indexPetiteBlinde:int
+					var indexGrosseBlinde:int
+					notreIndex = _pokertable.GetPlayerIndex(this);
+					indexDealer = _pokertable.GetNextPlayerIndex(_pokertable.GetPlayerIndex(_pokertable.GetDealer()));
+					indexPetiteBlinde = _pokertable.GetNextPlayerIndex(indexDealer);
+					indexGrosseBlinde = _pokertable.GetNextPlayerIndex(indexPetiteBlinde);
+					
+					if (_pokertable.GetNextPlayerIndex(indexGrosseBlinde) == notreIndex)
+						return true;
+					
+					return false;
+				}
+				
+
+				
+				
                
                 override public function ProcessPlayerAction(_player:PokerPlayer) : void
                 {
