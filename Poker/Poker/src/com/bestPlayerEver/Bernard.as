@@ -2,7 +2,6 @@ package com.bestPlayerEver
 {
 	import com.novabox.poker.PokerTools;
 	import flash.system.System;
-	import com.bestPlayerEver.TestPlayer;
 	import com.novabox.playingCards.Deck;
 	import com.novabox.playingCards.Height;
 	import com.novabox.playingCards.PlayingCard;
@@ -18,7 +17,7 @@ package com.bestPlayerEver
          * ...
          * @author
          */
-        public class TestPlayer extends PokerPlayer
+        public class Bernard extends PokerPlayer
         {
 			protected var handEvaluator:HandEvaluator;
 			protected var expertSystem:ExpertSystem;
@@ -52,14 +51,17 @@ package com.bestPlayerEver
 			
 			protected var SUIVREGROSSEBLINDE:String = "SuivreGrosseBlinde";
 			
-				public function TestPlayer(_name:String, _stackValue:Number)
+				public function Bernard(_name:String, _stackValue:Number)
                 {
                         super(_name, _stackValue);
 						expertSystem = new ExpertSystem();
 						handEvaluator = new HandEvaluator();
 						valeurDePortefeuilleDeDepart = GetStackValue();
-						// règles
 						
+                }
+				
+				private function initRules() : void
+				{
 						expertSystem.AddRule([SUIVREGROSSEBLINDE], CALL);
 						
 						
@@ -90,7 +92,8 @@ package com.bestPlayerEver
 						expertSystem.AddRule([CARTEJOUEURELEVEE, RELANCEFORTE], CALL);
 						expertSystem.AddRule([CARTEJOUEURELEVEE, RELANCEFORTE, PORTEFEUILLECONFORTABLE], LITTLERAISE);
 						expertSystem.AddRule([CARTEJOUEURELEVEE, RELANCEFORTE, PORTEFEUILLEFORT], BIGRAISE);
-                }
+					
+				}
                
                 override public function Play(_pokertable:PokerTable) : Boolean {
  
@@ -122,10 +125,7 @@ package com.bestPlayerEver
                        
                         var conclusionLabels:Array = expertSystem.InferForward();
                        
-                        //conclusionLabels = expertSystem.InferForward()
-                       
                         var actions:Array = new Array();
-                        //actions = /*conclusionLabels sans les faits intermédiaires*/
 						for each (var uneConclusion:String in conclusionLabels){
 							actions.push(uneConclusion);
 						}
@@ -178,7 +178,6 @@ package com.bestPlayerEver
 						}
 						
 						//Perçoit notre position sur la table
-						//_pokertable.GetCurrentPlayer()
 						if (_pokertable.GetDealer() == this) {
 							expertSystem.SetFactValue(POSITIONDEALER, true);	
 						} else if(estPetiteBlinde(_pokertable)){
@@ -190,12 +189,13 @@ package com.bestPlayerEver
 						}
 
 
+						//Perçoit la valeur de nos cartes
 						if (_pokertable.GetPreviousStateId() == Preflop.ID) { // si on est en préFlop
 							valeurCarte = GetCard(0).GetHeight() + GetCard(1).GetHeight();
 							trace(valeurCarte);
 							
 							if (GetCard(0).GetHeight() == GetCard(1).GetHeight()) {
-								valeurCarte += 8; // s'il y a une paire, on rajoute de la valeur aux cartes
+								valeurCarte += 9; // s'il y a une paire, on rajoute de la valeur aux cartes
 							}
 							
 							if ((valeurCarte >= 0) && (valeurCarte < 4 ))
@@ -255,20 +255,6 @@ package com.bestPlayerEver
 							
 						}
 							
-						
-
-
-						
-						//Perçoit la valeur de nos cartes                    
-                        if (GetCard(0).GetHeight() == GetCard(1).GetHeight()) {
-                                //Pocket Pair
-                               
-                                if (GetCard(0).GetHeight() >= Height.TEN) {
-                                        //Au moins une paire de 10
-                                       
-                                }
-                        }
-						
                        
                 }
 				
