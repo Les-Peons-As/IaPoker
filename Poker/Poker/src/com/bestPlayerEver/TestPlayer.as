@@ -1,5 +1,6 @@
 package com.bestPlayerEver 
 {
+	import flash.system.System;
 	import com.bestPlayerEver.TestPlayer;
 	import com.novabox.playingCards.Deck;
 	import com.novabox.playingCards.Height;
@@ -19,6 +20,7 @@ package com.bestPlayerEver
         {
 			protected var handEvaluator:HandEvaluator;
 			protected var expertSystem:ExpertSystem;
+			protected var valeurDePortefeuilleDeDepart:int;
 			// conclusions
 			protected static const LITTLERAISE:String = "Petite relance";
 			protected static const BIGRAISE:String = "Grosse relance";
@@ -53,6 +55,7 @@ package com.bestPlayerEver
                         super(_name, _stackValue);
 						expertSystem = new ExpertSystem();
 						handEvaluator = new HandEvaluator();
+						valeurDePortefeuilleDeDepart = GetStackValue();
 						// règles
 						
 						expertSystem.AddRule([SUIVREGROSSEBLINDE], CALL);
@@ -104,9 +107,13 @@ package com.bestPlayerEver
 								Raise(GetStackValue(), pokerTable.GetValueToCall());
 						} else if (actionLabel == CHECK) {
 								Check();
+						} else if (actionLabel == FOLD) {
+								Fold();
+						} else if (actionLabel == BIGRAISE) {
+								Raise(pokerTable.GetValueToCall(), Math.floor((Math.random() * (pokerTable.GetValueToCall()/6)) + pokerTable.GetValueToCall()/5));
+						} else if (actionLabel == LITTLERAISE) {
+								Raise(pokerTable.GetValueToCall(), Math.floor((Math.random() * (pokerTable.GetValueToCall()/15)) + pokerTable.GetValueToCall()/12));
 						}
-                        /* else if (...) {
-                        } */
                 }
                
                 public function Analyze() : String {
@@ -124,8 +131,6 @@ package com.bestPlayerEver
                        
                         if (actions.length > 1) {
                                 //Problème de logique parallèle
-                               
-                                /* Choisir une action */
 								var indexAleatoire:int = new int;
 								indexAleatoire = Math.floor((Math.random() * (length - 1)) + 0);
 								return actions[indexAleatoire];
@@ -135,7 +140,6 @@ package com.bestPlayerEver
                                 return actions[0];
                         } else {
                                 //Pas d'action trouvée
-                                //return null;
 								return CALL;
                         }
 						return CALL;
@@ -148,16 +152,35 @@ package com.bestPlayerEver
 						var valeurCarte:int;
 						valeurCarte= new int;
                        
+						//Perçoit la valeur de la relance
                         if (_pokertable.GetValueToCall() > 0) {
                                 //Relancé
-								if (_pokertable.GetValueToCall() < 10)
+								if (_pokertable.GetValueToCall() < 20)
 									expertSystem.SetFactValue(RELANCEFAIBLE, true);
 								else
 									expertSystem.SetFactValue(RELANCEFORTE, true);
                         } else {
                                 expertSystem.SetFactValue(RELANCENULLE, true);
                         }
-                                               
+						
+						//Perçoit la valeur de son portefeuille
+						if (GetStackValue() >= (valeurDePortefeuilleDeDepart * 3)) {
+							expertSystem.SetFactValue(PORTEFEUILLEFORT, true);
+							
+						} else if (GetStackValue() < valeurDePortefeuilleDeDepart) {
+							expertSystem.SetFactValue(PORTEFEUILLEFAIBLE, true);
+							
+						} else {
+							expertSystem.SetFactValue(PORTEFEUILLECONFORTABLE, true)
+						}
+						
+						//Perçoit sa potition sur la table
+						//_pokertable.GetCurrentPlayer()
+						/*if (_pokertable.GetDealer() == this)
+							expertSystem.SetFactValue(POSITIONDEALER, true);*/
+						
+						
+						//Perçoit la valeur des cartes                    
                         if (GetCard(0).GetHeight() == GetCard(1).GetHeight()) {
                                 //Pocket Pair
                                
