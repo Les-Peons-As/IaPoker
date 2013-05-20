@@ -1,5 +1,6 @@
 package com.bestPlayerEver 
 {
+	import com.novabox.poker.PokerTools;
 	import flash.system.System;
 	import com.bestPlayerEver.TestPlayer;
 	import com.novabox.playingCards.Deck;
@@ -10,6 +11,7 @@ package com.bestPlayerEver
 	import com.novabox.poker.HumanPlayer;
 	import com.novabox.poker.PokerPlayer;
 	import com.novabox.poker.PokerTable;
+	import com.novabox.poker.HandValue;
 	import com.novabox.poker.states.Preflop;
 		import com.novabox.poker.PokerAction;
         /**
@@ -163,6 +165,7 @@ package com.bestPlayerEver
                                 expertSystem.SetFactValue(RELANCENULLE, true);
                         }
 						
+						
 						//Perçoit la valeur de notre portefeuille
 						if (GetStackValue() >= (valeurDePortefeuilleDeDepart * 3)) {
 							expertSystem.SetFactValue(PORTEFEUILLEFORT, true);
@@ -185,7 +188,76 @@ package com.bestPlayerEver
 						} else {
 							expertSystem.SetFactValue(POSITIONAUTRE, true);
 						}
+
+
+						if (_pokertable.GetPreviousStateId() == Preflop.ID) { // si on est en préFlop
+							valeurCarte = GetCard(0).GetHeight() + GetCard(1).GetHeight();
+							trace(valeurCarte);
+							
+							if (GetCard(0).GetHeight() == GetCard(1).GetHeight()) {
+								valeurCarte += 8; // s'il y a une paire, on rajoute de la valeur aux cartes
+							}
+							
+							if ((valeurCarte >= 0) && (valeurCarte < 4 ))
+							{
+								expertSystem.SetFactValue(CARTEJOUEURFAIBLE, true);
+							} else if ((valeurCarte >= 5) && (valeurCarte < 9 )) {
+								expertSystem.SetFactValue(CARTEJOUEURMOYENBAS, true);
+							} else if ((valeurCarte >= 10) && (valeurCarte < 14 )) {
+								expertSystem.SetFactValue(CARTEJOUEURMOYENHAUT, true);
+							} else if (valeurCarte >= 15) {
+								expertSystem.SetFactValue(CARTEJOUEURELEVEE, true);
+							}
+							
+						} else {
+
+							var cardSet:Array = new Array();
+							AddCard(cardSet, GetCard(0));
+							AddCard(cardSet, GetCard(1));
+							for each (var uneCarteDeLaTable:PlayingCard in _pokertable.GetBoard()){
+								AddCard(cardSet, uneCarteDeLaTable);
+							}
+							var playerScore:int = PokerTools.GetCardSetValue(cardSet);
+							switch(handEvaluator.hand_rank(playerScore)){
+								case HandValue.HIGH_CARD:
+									expertSystem.SetFactValue(CARTEJOUEURFAIBLE, true);
+									break;
+								case HandValue.PAIR:
+									expertSystem.SetFactValue(CARTEJOUEURMOYENBAS, true);
+									break;
+								case HandValue.TWO_PAIRS:
+									expertSystem.SetFactValue(CARTEJOUEURMOYENHAUT, true);
+									break;
+								case HandValue.THREE_OF_A_KIND:
+									expertSystem.SetFactValue(CARTEJOUEURMOYENHAUT, true);
+								break;
+									case HandValue.STRAIGHT:
+									expertSystem.SetFactValue(CARTEJOUEURMOYENHAUT, true);
+									break;
+								case HandValue.FLUSH:
+									expertSystem.SetFactValue(CARTEJOUEURMOYENHAUT, true);
+								break;
+									case HandValue.FULL_HOUSE:
+									expertSystem.SetFactValue(CARTEJOUEURELEVEE, true);
+									break;
+								case HandValue.FOUR_OF_A_KIND:
+									expertSystem.SetFactValue(CARTEJOUEURELEVEE, true);
+									break;
+								case HandValue.STRAIGHT_FLUSH:
+									expertSystem.SetFactValue(CARTEJOUEURELEVEE, true);
+									break;
+								case HandValue.ROYAL_FLUSH:
+									expertSystem.SetFactValue(CARTEJOUEURELEVEE, true);
+									break;
+								default:
+									expertSystem.SetFactValue(CARTEJOUEURFAIBLE, true);;
+							}
+							
+						}
+							
 						
+
+
 						
 						//Perçoit la valeur de nos cartes                    
                         if (GetCard(0).GetHeight() == GetCard(1).GetHeight()) {
@@ -197,21 +269,16 @@ package com.bestPlayerEver
                                 }
                         }
 						
-						//valeurCarte = handEvaluator.eval_5cards(GetCard(0).GetHeight(), GetCard(1).GetHeight(), GetCard(2).GetHeight(), GetCard(3).GetHeight(), GetCard(4).GetHeight());
-						valeurCarte = GetCard(0).GetHeight() + GetCard(1).GetHeight();
-						trace(valeurCarte);
-						if ((valeurCarte >= 0) && (valeurCarte < 25 ))
-						{
-							expertSystem.SetFactValue(CARTEJOUEURFAIBLE, true);
-						} else if ((valeurCarte >= 25) && (valeurCarte < 50 )) {
-							expertSystem.SetFactValue(CARTEJOUEURMOYENBAS, true);
-						} else if ((valeurCarte >= 50) && (valeurCarte < 75 )) {
-							expertSystem.SetFactValue(CARTEJOUEURMOYENHAUT, true);
-						} else if ((valeurCarte >= 75) && (valeurCarte <= 100 )) {
-							expertSystem.SetFactValue(CARTEJOUEURELEVEE, true);
-						}
                        
                 }
+				
+				private function AddCard(_cardSet:Array, _card:PlayingCard) : void
+				{
+					if (_card != null)
+					{
+						_cardSet.push(_card);
+					}
+				}
 				
 				private function estPetiteBlinde(_pokertable:PokerTable) : Boolean
 				{
