@@ -15,9 +15,10 @@ package com.bestPlayerEver
 		import com.novabox.poker.PokerAction;
         /**
          * ...
+		 * I'm sorry, Dave. I'm afraid I can't let you win this hand.
          * @author
          */
-        public class Bernard extends PokerPlayer
+        public class Hal extends PokerPlayer
         {
 			protected var handEvaluator:HandEvaluator;
 			protected var expertSystem:ExpertSystem;
@@ -51,7 +52,7 @@ package com.bestPlayerEver
 			
 			protected var SUIVREGROSSEBLINDE:String = "SuivreGrosseBlinde";
 			
-				public function Bernard(_name:String, _stackValue:Number)
+				public function Hal(_name:String, _stackValue:Number)
                 {
                         super(_name, _stackValue);
 						expertSystem = new ExpertSystem();
